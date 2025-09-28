@@ -1,0 +1,18 @@
+name: Auto Update README
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # каждые 6 часов
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update timestamp
+        run: |
+          echo "Last updated: $(date)" >> README.md
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Auto update timestamp" || exit 0
+          git push
